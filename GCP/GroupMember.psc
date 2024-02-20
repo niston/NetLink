@@ -14,7 +14,7 @@ Scriptname NetLink:GCP:GroupMember extends ObjectReference
 Import SUP_F4SE
 
 Int Property IMPL_VERSION_MAJOR = 0 AutoReadOnly Hidden		; GCP group member implementation version major
-Int Property IMPL_VERSION_MINOR = 52 AutoReadOnly Hidden	; GCP group member implementation version minor
+Int Property IMPL_VERSION_MINOR = 53 AutoReadOnly Hidden	; GCP group member implementation version minor
 
 CustomEvent GCPGroupReceive
 CustomEvent GCPGroupControllerJoin

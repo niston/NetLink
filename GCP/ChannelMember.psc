@@ -28,7 +28,7 @@ Int Property ERROR_GCP_CHANNEL_NOGROUPMEMBER = -3303 AutoReadOnly Hidden			; fai
 Int Property ERROR_GCP_CHANNEL_CONFIG = -3304 AutoReadOnly Hidden					; invalid GCP Channel configuration
 
 Int Property IMPL_VERSION_MAJOR = 0 AutoReadOnly Hidden								; GCP group channel member implementation version major
-Int Property IMPL_VERSION_MINOR = 52 AutoReadOnly Hidden	    					; GCP group channel member implementation version minor
+Int Property IMPL_VERSION_MINOR = 53 AutoReadOnly Hidden	    					; GCP group channel member implementation version minor
 
 ; channel functions
 

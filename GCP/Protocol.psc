@@ -13,7 +13,7 @@ Import SUP_F4SE
 
 ; Implementation version info
 Int Property IMPL_VERSION_MAJOR = 0 AutoReadOnly Hidden		; GCP implementation version major (should match LinkLayer version)
-Int Property IMPL_VERSION_MINOR = 52 AutoReadOnly Hidden	; GCP implementation version minor (should match LinkLayer version)
+Int Property IMPL_VERSION_MINOR = 53 AutoReadOnly Hidden	; GCP implementation version minor (should match LinkLayer version)
 
 ; GCP protocol identifiers
 Int Property NETLINK_FRAMETYPE_GCP = 10 AutoReadOnly Hidden	; GCP protocol uses netlink frametype 10
@@ -283,16 +283,16 @@ Int Function SendGCPPacket(ObjectReference refRecipient, GCPPacket outPacket)
 	Return success	
 EndFunction
 
-;Function OnLinkReceive(Var[] eventArgs)
-Function OnLinkReceive(NetLink:API:LinkLayerBase:NRSE_InvokeArgs eventArgs)
+Function OnLinkReceive(Var[] eventArgs)
+;Function OnLinkReceive(NetLink:API:LinkLayerBase:NRSE_InvokeArgs eventArgs)
 	
 	; SUP accelerated version
-	;NetLink:LinkLayer srcLinkLayer = eventArgs[0] as NetLink:LinkLayer
-	;NetLink:LinkLayer:NetLinkFrame inFrame = eventArgs[1] as NetLink:LinkLayer:NetLinkFrame
+	NetLink:API:LinkLayerBase srcLinkLayer = eventArgs[0] as NetLink:LinkLayer
+	NetLink:API:LinkLayerBase:NetLinkFrame inFrame = eventArgs[1] as NetLink:API:LinkLayerBase:NetLinkFrame
 
 	; PAPYRUS VERSION
-	NetLink:API:LinkLayerBase srcLinkLayer = eventArgs.callbackArgs[0] as NetLink:LinkLayer
-	NetLink:API:LinkLayerBase:NetLinkFrame inFrame = eventArgs.callbackArgs[1] as NetLink:API:LinkLayerBase:NetLinkFrame
+	;NetLink:API:LinkLayerBase srcLinkLayer = eventArgs.callbackArgs[0] as NetLink:LinkLayer
+	;NetLink:API:LinkLayerBase:NetLinkFrame inFrame = eventArgs.callbackArgs[1] as NetLink:API:LinkLayerBase:NetLinkFrame
 
 
 	; RX filters
@@ -357,7 +357,7 @@ EndFunction
 Bool Function CheckGroupValid(String groupName)		; check if groupName is a valid GCP Group Name
 	groupName = StringRemoveWhitespace(groupName)
 	If (StringGetLength(groupName) > CONST_GROUPMAXLEN)
-		Return False
+		Return False									; max len exceeded
 	EndIf
 	If (groupName == "")								; empty groupname not allowed
 		Return False

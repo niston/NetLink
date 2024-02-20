@@ -4,12 +4,7 @@ Scriptname NetLink:LinkLayer extends NetLink:API:LinkLayerBase
 ; NetLink LinkLayer - Custom scripting by niston
 
 
-;/ 0.48
-General: Cleaned and restrucured source code for LinkLayer and NetworkLayer scripts
-General: Added implementation stub for IP Protocol
-LinkLayer: Added Thread Lock Management for concurrent Frame Type Registry access
-LinkLayer: "Public" FTR functions are now Script State dependent
-/;
+;0.53: LinkLayerBase: Added SUP acceleration for Frame Type Registry (RX event delivery)
 
 ; require SUP F4SE
 Import SUP_F4SE
@@ -38,7 +33,7 @@ Int Property ERROR_PHY_NODEST = -1004 AutoReadOnly Hidden			; destination(s) req
 ; Link Layer Identification
 String Property LINKLAYER_IDENTIFIER = "NetLink" AutoReadOnly Hidden	; The name of the game
 Int Property LINKLAYER_VERSION_MAJOR = 0 AutoReadOnly Hidden			; Implementation major
-Int Property LINKLAYER_VERSION_MINOR = 52 AutoReadOnly Hidden			; Implementation minor
+Int Property LINKLAYER_VERSION_MINOR = 53 AutoReadOnly Hidden			; Implementation minor
 
 ; LAMP protocol support
 Int Property NETLINK_FRAMETYPE_LAMP = 1 AutoReadOnly Hidden				; LAMP FrameType

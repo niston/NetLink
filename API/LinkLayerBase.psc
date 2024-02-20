@@ -28,6 +28,7 @@ Int Property ERROR_LNK_FRAMETYPE = -2003 AutoReadOnly Hidden 		; invalid framety
 Int Property ERROR_LNK_NOPROTO = -2004 AutoReadOnly Hidden			; Inexistent (none) network layer protocol
 Int Property ERROR_LNK_FTREGMAX = -2005 AutoReadOnly Hidden			; Maximum number of frametypes registered
 Int Property ERROR_LNK_NOADDR = - 2006 AutoReadOnly Hidden			; Station address cannot be determined
+Int Property ERROR_LNK_FTREGACCEL = -2007 AutoReadOnly Hidden		; Frame Type Registry acceleration failure
 
 
 ; known protocols
@@ -491,7 +492,7 @@ EndFunction
 Int Function _FTRDeliverFrameToNetworkLayers(NetLinkFrame frame)
 	; get write only lock, so others can't write while we read
 	If (!_LockAcquire(LOCK_FTR, lockReads = false, lockWrites = true))
-		Debug.Trace(Self + ": ERROR - FTR: DeliverFrameToNetworkLayers failed to acquire LOCK_FTR for read only. Frame discarded.")
+		Debug.Trace(Self + ": ERROR - FTR: DeliverFrameToNetworkLayers failed to acquire LOCK_FTR for write only. Frame discarded.")
 		Return ERROR_LOCK_ACQFAIL
 	EndIf
 	
@@ -511,20 +512,28 @@ Int Function _FTRDeliverFrameToNetworkLayers(NetLinkFrame frame)
 			; no, frametype delivered to 0 protocols
 			_LockRelease(LOCK_FTR)
 			Return 0
-		Else
-			; create OnNetLinkFrameRX invoke parameters
-			Var[] invokeParams = new Var[2]
-			invokeParams[0] = Self
-			invokeParams[1] = frame				
-			
-			; deliver to registered protocols
-			; _LockRelease(LOCK_FTR)
-			; Return NotifyReferenceScripts(ftProtocols as ObjectReference[], "NetLink:API:NetworkLayerBase", "OnNetLinkFrameRX", invokeParams)	; does NOT work reliably beacuse fixed scriptname
-			; working version not sup accelerated yet:
-
-			_LockRelease(LOCK_FTR)
-			Return _NotifyReferenceScriptsEx(ftProtocols as ObjectReference[], _FTRegistry[frameTypeIndex].NetworkLayerScriptnames, "OnLinkReceive", invokeParams)
 		EndIf
+
+		; create OnLinkReceive invoke parameters
+		Var[] invokeParams = new Var[2]
+		invokeParams[0] = Self
+		invokeParams[1] = frame				
+		
+		; deliver frame to registered protocols
+		Int rxCount = NotifyReferenceScriptsEx(ftProtocols as ObjectReference[], _FTRegistry[frameTypeIndex].NetworkLayerScriptnames, "OnLinkReceive", invokeParams)		
+		If (rxCount < 0)
+			Debug.Trace(Self + ": ERROR - FTR: Acceleration failure (" + rxCount + ").")
+			_LockRelease(LOCK_FTR)
+			Return ERROR_LNK_FTREGACCEL
+		Else
+			_LockRelease(LOCK_FTR)
+			Return rxCount
+		EndIf
+		
+		; ### DEPRECATED: old non-accelerated event delivery method ###
+		; working version not sup accelerated yet:
+		;_LockRelease(LOCK_FTR)
+		;Return _NotifyReferenceScriptsEx(ftProtocols as ObjectReference[], _FTRegistry[frameTypeIndex].NetworkLayerScriptnames, "OnLinkReceive", invokeParams)
 	EndIf
 EndFunction
 

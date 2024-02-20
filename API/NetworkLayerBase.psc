@@ -45,7 +45,7 @@ String Property NetworkLayerScriptname Hidden						; provides (cached) name of N
 				beginPos += 1 ; beginpattern length
 				Int endPos = SUPStringFind(refText, endPattern, beginPos, 0)
 				If (endPos > -1)
-					endPos -= 1
+					endPos -= 1; 
 					_ScriptnameCache = StringFindSubString(refText, beginPos, endPos)
 					; success
 					Return _ScriptnameCache
@@ -134,8 +134,8 @@ Int Function GetVersionMinor()																; ABSTRACT: Network Layer Protocol
 	Return 0
 EndFunction
 
-;Function OnLinkReceive(Var[] eventArgs)													; ABSTRACT: FTR frame receiver function	
-Function OnLinkReceive(NetLink:API:LinkLayerBase:NRSE_InvokeArgs eventArgs)							; ABSTRACT: FTR frame receiver function	(PAPYRUS VERSION until SUP acceleration is ready)
+Function OnLinkReceive(Var[] eventArgs)													; ABSTRACT: FTR frame receiver function	
+;Function OnLinkReceive(NetLink:API:LinkLayerBase:NRSE_InvokeArgs eventArgs)							; ABSTRACT: FTR frame receiver function	(PAPYRUS VERSION until SUP acceleration is ready)
 	Debug.Trace(Self + ": WARNING - OnLinkReceive invoked on NetworkLayer Base Class. Frame discarded.")
 EndFunction
 

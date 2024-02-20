@@ -6,9 +6,9 @@ Scriptname NetLink:GCP:API:Device extends NetLink:GCP:ChannelMember Hidden
 
 ;/ 0.51
 GCP:API:Device: Added OnCircuitOpenChanged function.
-GCP:API:Device: Fix bug in CircuitToggle
-GCP:API:Device: Fix superfluous logging in CircuitOpen
-GCP:API:Device: Added API field update/restart capabilities
+GCP:API:Device: Fix bug in CircuitToggle function.
+GCP:API:Device: Fix superfluous logging in CircuitOpen.
+GCP:API:Device: Added API field update/restart capabilities.
 GCP:API:Device: Added support for Auxilliary Channels 1-3
 /;
 
@@ -17,7 +17,7 @@ Import SUP_F4SE
 
 ; device version, mismatch will trigger automatic field update/restart
 Int Property GCP_DEVICE_VERSION_MAJOR = 0 AutoReadOnly Hidden
-Int Property GCP_DEVICE_VERSION_MINOR = 52 AutoReadOnly Hidden
+Int Property GCP_DEVICE_VERSION_MINOR = 53 AutoReadOnly Hidden
 
 ; GCP device types
 Int Property GCP_DEVICETYPE_UNKNOWN = 0 AutoReadOnly Hidden
@@ -105,7 +105,7 @@ Int Property AuxChannelCount
 EndProperty
 
 
-; Auxilliary Channels
+; Auxiliary Channels
 NetLink:GCP:API:AuxChannels:Base[] _AuxChannels
 
 
@@ -149,7 +149,7 @@ Int Function Start()
 	
 	Int result = AuxChannelsAcquire()
 	If (!CheckSuccessCode(result))
-		Debug.Trace(Self + ": ERROR - Failed to acquire Auxilliary Channels: Code (" + ResolveErrorCode(result) + " returned.")
+		Debug.Trace(Self + ": ERROR - Failed to acquire Auxiliary Channels: Code (" + ResolveErrorCode(result) + " returned.")
 		Return result
 	EndIf
 	
